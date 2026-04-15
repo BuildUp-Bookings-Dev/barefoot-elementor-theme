@@ -7,7 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BAREFOOT_ELEMENTOR_THEME_VERSION', '1.0.2' );
+define( 'BAREFOOT_ELEMENTOR_THEME_VERSION', '1.0.3' );
+
+require_once get_template_directory() . '/inc/github-theme-updater.php';
 
 if ( ! function_exists( 'barefoot_elementor_theme_setup' ) ) {
 	/**
