@@ -1,0 +1,357 @@
+/* ============================================================
+   Barefoot Hero Slider
+   ============================================================ */
+
+.bft-hero-slider-wrapper {
+	position: relative;
+	width: 100%;
+	height: 100vh; /* fallback; overridden by Elementor height control */
+	overflow: visible;
+	user-select: none;
+}
+
+/* ── Track ─────────────────────────────────────────────────── */
+
+.bft-slides-track {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	transition: transform var(--bft-transition-speed, 600ms) ease-in-out;
+	will-change: transform;
+}
+
+/* ── Individual slide ──────────────────────────────────────── */
+
+.bft-slide {
+	position: relative;
+	min-width: 100%;
+	height: 100%; /* sized by wrapper; overridden by Elementor height control */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	flex-shrink: 0;
+}
+
+/* ── Overlay ───────────────────────────────────────────────── */
+
+.bft-slide-overlay {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+}
+
+/* ── Slide content ─────────────────────────────────────────── */
+
+.bft-slide-content {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	padding: 2rem;
+	max-width: 800px; /* fallback; overridden by Elementor content_max_width control */
+	width: 100%;
+}
+
+.bft-slide-title {
+	margin: 0 0 1rem;
+	font-size: clamp(2rem, 5vw, 3.5rem);
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+.bft-slide-text {
+	margin: 0 0 1rem;
+	font-size: clamp(1rem, 2vw, 1.25rem);
+	line-height: 1.6;
+}
+
+/* Spacer that reserves room for the persistent content overlay */
+.bft-slide-persistent-spacer {
+	width: 100%;
+	/* height is set dynamically by JS */
+}
+
+.bft-slide-btn {
+	display: inline-block;
+	/* padding, border-radius, font, colors: controlled by Elementor panel */
+	padding: 0.75rem 2rem; /* fallback */
+	text-decoration: none;
+	border: none;
+	cursor: pointer;
+	margin-top: 0.5rem;
+	transition-property: color, background-color, border-color, box-shadow;
+	transition-duration: 250ms; /* overridden by button_hover_transition control */
+	transition-timing-function: ease;
+}
+
+.bft-slide-btn:focus-visible {
+	outline: 3px solid currentColor;
+	outline-offset: 3px;
+}
+
+/* ── Persistent content overlay ────────────────────────────── */
+
+.bft-persistent-content {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 999;
+	width: 100%;
+	max-width: 800px; /* fallback; overridden by Elementor content_max_width control */
+	padding: 0 2rem;
+	/* top is set dynamically by JS */
+}
+
+/* ── Transition: Slide (default) ───────────────────────────── */
+
+/* Track already handles transform via .bft-slides-track */
+
+/* ── Transition: Slide Up ──────────────────────────────────── */
+
+.bft-transition-slide-up .bft-slides-track {
+	flex-direction: column;
+	/* height set by JS to slideCount * wrapperHeight */
+}
+
+.bft-transition-slide-up .bft-slide {
+	width: 100%;
+	min-width: 0;
+	/* min-height set by JS */
+}
+
+/* ── Transition: Fade ──────────────────────────────────────── */
+
+.bft-transition-fade .bft-slides-track,
+.bft-transition-zoom-fade .bft-slides-track {
+	display: block;
+	position: relative;
+	height: 100%;
+	transition: none; /* individual slides transition instead */
+}
+
+.bft-transition-fade .bft-slide,
+.bft-transition-zoom-fade .bft-slide {
+	position: absolute;
+	inset: 0;
+	min-width: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	z-index: 0;
+	transition: none; /* inactive slides don't animate out */
+}
+
+/* Outgoing slide: stays fully visible underneath, no animation */
+.bft-transition-fade .bft-slide.bft-slide-leaving,
+.bft-transition-zoom-fade .bft-slide.bft-slide-leaving {
+	opacity: 1;
+	z-index: 1;
+	transition: none;
+}
+
+/* Incoming slide: fades in on top */
+.bft-transition-fade .bft-slide.bft-slide-active {
+	opacity: 1;
+	z-index: 2;
+	transition: opacity var(--bft-transition-speed, 600ms) ease-in-out;
+}
+
+/* ── Transition: Zoom Fade ─────────────────────────────────── */
+
+.bft-transition-zoom-fade .bft-slide {
+	transform: scale(1.08);
+}
+
+.bft-transition-zoom-fade .bft-slide.bft-slide-leaving {
+	transform: scale(1);
+}
+
+.bft-transition-zoom-fade .bft-slide.bft-slide-active {
+	opacity: 1;
+	z-index: 2;
+	transform: scale(1);
+	transition:
+		opacity var(--bft-transition-speed, 600ms) ease-in-out,
+		transform var(--bft-transition-speed, 600ms) ease-in-out;
+}
+
+/* ── Reduced motion overrides ──────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+	.bft-slides-track {
+		transition: none;
+	}
+
+	.bft-transition-fade .bft-slide,
+	.bft-transition-zoom-fade .bft-slide {
+		transition: none;
+	}
+
+	.bft-transition-zoom-fade .bft-slide {
+		transform: scale(1);
+	}
+}
+
+/* ╔══════════════════════════════════════════════════════════╗
+   ║  Navigation – Style 1 (default)                         ║
+   ║  Arrows: left & right, vertically centered              ║
+   ║  Dots: bottom-center, horizontal row                    ║
+   ╚══════════════════════════════════════════════════════════╝ */
+
+/* ── Arrows (shared base) ──────────────────────────────────── */
+
+.bft-slider-arrow {
+	position: absolute;
+	z-index: 10;
+	cursor: pointer;
+	background: rgba(0, 0, 0, 0.35);
+	border: none;
+	border-radius: 50%;
+	width: 48px;
+	height: 48px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #ffffff;
+	transition: background 0.2s ease;
+	padding: 0;
+}
+
+.bft-slider-arrow:hover,
+.bft-slider-arrow:focus-visible {
+	background: rgba(0, 0, 0, 0.6);
+	outline: 3px solid rgba(255, 255, 255, 0.6);
+	outline-offset: 2px;
+}
+
+/* Style 1 arrow positions */
+.bft-nav-style-1 .bft-slider-arrow-prev,
+.bft-slider-arrow-prev { /* fallback for no class */
+	top: 50%;
+	left: 1.5rem;
+	transform: translateY(-50%);
+}
+
+.bft-nav-style-1 .bft-slider-arrow-next,
+.bft-slider-arrow-next {
+	top: 50%;
+	right: 1.5rem;
+	transform: translateY(-50%);
+}
+
+/* ── Dots (shared base) ────────────────────────────────────── */
+
+.bft-slider-dots {
+	position: absolute;
+	z-index: 10;
+	display: flex;
+	gap: 0.5rem;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.bft-slider-dot {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.5);
+	border: 2px solid rgba(255, 255, 255, 0.8);
+	cursor: pointer;
+	transition: background 0.2s ease, transform 0.2s ease;
+	padding: 0;
+}
+
+.bft-slider-dot:hover {
+	background: rgba(255, 255, 255, 0.8);
+}
+
+.bft-slider-dot.active,
+.bft-slider-dot[aria-selected="true"] {
+	background: #ffffff;
+	transform: scale(1.25);
+}
+
+.bft-slider-dot:focus-visible {
+	outline: 3px solid rgba(255, 255, 255, 0.8);
+	outline-offset: 3px;
+}
+
+/* Style 1 dot positions */
+.bft-nav-style-1 .bft-slider-dots,
+.bft-slider-dots { /* fallback */
+	bottom: 1.5rem;
+	left: 50%;
+	transform: translateX(-50%);
+	flex-direction: row;
+}
+
+/* ╔══════════════════════════════════════════════════════════╗
+   ║  Navigation – Style 2                                   ║
+   ║  Arrows: bottom-center, side by side                    ║
+   ║  Dots: left side, vertically centered, stacked          ║
+   ╚══════════════════════════════════════════════════════════╝ */
+
+/* Arrows */
+.bft-nav-style-2 .bft-slider-arrow {
+	top: auto;
+	transform: none;
+	bottom: 1.5rem;
+}
+
+.bft-nav-style-2 .bft-slider-arrow-prev {
+	left: calc(50% - 52px); /* 48px width + 4px gap, left of center */
+	right: auto;
+}
+
+.bft-nav-style-2 .bft-slider-arrow-next {
+	left: calc(50% + 4px); /* 4px gap right of center */
+	right: auto;
+}
+
+/* Dots */
+.bft-nav-style-2 .bft-slider-dots {
+	flex-direction: column;
+	left: 1.5rem;
+	bottom: auto;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+	.bft-slider-arrow {
+		width: 40px;
+		height: 40px;
+	}
+
+	/* Style 1 mobile */
+	.bft-nav-style-1 .bft-slider-arrow-prev,
+	.bft-slider-arrow-prev {
+		left: 0.75rem;
+	}
+
+	.bft-nav-style-1 .bft-slider-arrow-next,
+	.bft-slider-arrow-next {
+		right: 0.75rem;
+	}
+
+	/* Style 2 mobile: recalculate centered arrow pair for 40px width */
+	.bft-nav-style-2 .bft-slider-arrow-prev {
+		left: calc(50% - 44px); /* 40px + 4px gap */
+	}
+
+	.bft-nav-style-2 .bft-slider-arrow-next {
+		left: calc(50% + 4px);
+	}
+
+	.bft-slide-btn {
+		padding: 0.65rem 1.5rem;
+	}
+}

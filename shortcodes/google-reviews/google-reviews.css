@@ -1,0 +1,282 @@
+/* ============================================================
+   Barefoot Theme – Google Reviews Slider
+   All selectors are scoped under .bft-reviews to beat
+   Elementor's generic p / hr / button resets.
+   ============================================================ */
+
+@import url( 'https://fonts.googleapis.com/css2?family=Oswald:wght@300;500&display=swap' );
+
+/* ── Card ───────────────────────────────────────────────────── */
+
+.bft-reviews {
+	--bft-reviews-bg: #2ea3ad;
+
+	background-color: var( --bft-reviews-bg );
+	color: #fff;
+	border-radius: 4px;
+	padding: 3rem 2rem 2.5rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	box-sizing: border-box;
+}
+
+@media ( min-width: 768px ) {
+	.bft-reviews {
+		padding: 5rem 5rem 3rem;
+	}
+}
+
+/* ── Stars ──────────────────────────────────────────────────── */
+
+.bft-reviews .bft-reviews__stars {
+	display: flex;
+	gap: 4px;
+	justify-content: center;
+	margin-bottom: 4rem;
+}
+
+@media ( min-width: 768px ) {
+	.bft-reviews .bft-reviews__stars {
+		margin-bottom: 5rem;
+	}
+}
+
+.bft-reviews .bft-reviews__star {
+	display: inline-flex;
+}
+
+.bft-reviews .bft-reviews__star svg {
+	width: 32px;
+	height: 32px;
+}
+
+.bft-reviews .bft-reviews__star.is-filled svg {
+	fill: #fff;
+}
+
+.bft-reviews .bft-reviews__star.is-empty svg {
+	fill: rgba( 255, 255, 255, 0.25 );
+}
+
+/* ── Content wrapper
+     position:relative so the quote anchors to it.
+     NOT overflow:hidden — that lives on the viewport child.     */
+
+.bft-reviews .bft-reviews__content {
+	position: relative;
+	width: 100%;
+	max-width: 56rem;
+}
+
+/* ── Quote: absolute to .bft-reviews__content, floats up into
+     the gap between stars and text.                            */
+
+.bft-reviews .bft-reviews__quote {
+	position: absolute;
+	top: -3rem;
+	right: 0;
+	line-height: 0;
+	pointer-events: none;
+	user-select: none;
+	z-index: 1;
+}
+
+/* ── Viewport: the only overflow:hidden element ─────────────── */
+
+.bft-reviews .bft-reviews__viewport {
+	width: 100%;
+	overflow: hidden;
+	transition: height 0.45s ease;
+}
+
+/* ── Track ──────────────────────────────────────────────────── */
+
+.bft-reviews .bft-reviews__track {
+	display: flex;
+	align-items: flex-start; /* let each slide keep its natural height */
+	transition: transform 0.45s ease;
+	will-change: transform;
+}
+
+/* ── Slide ──────────────────────────────────────────────────── */
+
+.bft-reviews .bft-reviews__slide {
+	width: 100%;
+	min-width: 100%;
+	max-width: 100%;
+	flex: 0 0 100%;
+	padding: 0 3rem;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	overflow: hidden;
+}
+
+/* ── Review text ────────────────────────────────────────────── */
+
+.bft-reviews .bft-reviews__text {
+	font-family: 'Oswald', sans-serif;
+	letter-spacing: 0.02em;
+	font-weight: 300;
+	font-size: 1.125rem;
+	line-height: 1.65;
+	max-width: 42rem;
+	width: 100%;
+	margin: 0 0 2.5rem;
+	color: #fff;
+}
+
+@media ( min-width: 768px ) {
+	.bft-reviews .bft-reviews__text {
+		font-size: 1.25rem;
+	}
+}
+
+/* ── Divider ────────────────────────────────────────────────── */
+
+.bft-reviews .bft-reviews__divider {
+	border: 0 !important;
+	border-top: 1px solid rgba( 255, 255, 255, 0.5 ) !important;
+	height: 0;
+	width: 420px;
+	max-width: 80%;
+	margin: 0 0 2.5rem;
+	flex-shrink: 0;
+}
+
+/* ── Author name ────────────────────────────────────────────── */
+
+.bft-reviews .bft-reviews__author {
+	font-family: 'Oswald', sans-serif;
+	letter-spacing: 0.02em;
+	font-weight: 500;
+	font-size: 1.125rem;
+	color: #fff;
+	margin: 0 0 2rem;
+}
+
+@media ( min-width: 768px ) {
+	.bft-reviews .bft-reviews__author {
+		font-size: 1.25rem;
+	}
+}
+
+/* ── Navigation ─────────────────────────────────────────────── */
+
+.bft-reviews .bft-reviews__nav {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 6rem;
+	width: 100%;
+	margin-top: 2rem;
+}
+
+@media ( min-width: 768px ) {
+	.bft-reviews .bft-reviews__nav {
+		gap: 10rem;
+	}
+}
+
+/* ── Buttons — same spec as property grid image nav ─────────── */
+
+.bft-reviews .bft-reviews__btn {
+	appearance: none;
+	border: 0 !important;
+	background: #ffffffd1 !important;
+	color: #334155 !important;
+	width: 2.65rem !important;
+	height: 2.65rem !important;
+	border-radius: 999px !important;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.875rem !important;
+	line-height: 1;
+	cursor: pointer;
+	padding: 0;
+	flex-shrink: 0;
+	box-shadow: 0 8px 20px rgba( 15, 23, 42, 0.18 ) !important;
+	backdrop-filter: blur( 1.5px );
+	transition: background-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.bft-reviews .bft-reviews__btn:hover {
+	background: rgba( 255, 255, 255, 0.94 ) !important;
+	color: #0f172a !important;
+	box-shadow: 0 10px 24px rgba( 15, 23, 42, 0.25 ) !important;
+}
+
+.bft-reviews .bft-reviews__btn:active {
+	transform: scale( 0.97 );
+}
+
+.bft-reviews .bft-reviews__btn:focus-visible {
+	outline: 2px solid #2563eb;
+	outline-offset: 2px;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+
+@media ( max-width: 767px ) {
+	.bft-reviews {
+		padding: 2rem 1.25rem 1.75rem;
+	}
+
+	.bft-reviews .bft-reviews__stars {
+		margin-bottom: 2rem;
+	}
+
+	.bft-reviews .bft-reviews__quote {
+		top: -1.75rem;
+		right: 0.25rem;
+		transform: scale( 0.78 );
+		transform-origin: top right;
+	}
+
+	.bft-reviews .bft-reviews__slide {
+		padding: 0;
+	}
+
+	.bft-reviews .bft-reviews__slide > * {
+		max-width: 100%;
+		box-sizing: border-box;
+	}
+
+	.bft-reviews .bft-reviews__text {
+		width: 100% !important;
+		max-width: 100% !important;
+		font-size: 1rem !important;
+		line-height: 1.65 !important;
+		margin-bottom: 2rem;
+	}
+
+	.bft-reviews .bft-reviews__divider {
+		width: 100%;
+		max-width: 100%;
+		margin-bottom: 1.75rem;
+	}
+
+	.bft-reviews .bft-reviews__author {
+		width: 100%;
+		max-width: 100%;
+		font-size: clamp( 1.5rem, 8vw, 2rem ) !important;
+		line-height: 1.1 !important;
+		margin-bottom: 1.25rem;
+		text-align: center;
+		overflow-wrap: anywhere;
+	}
+
+	.bft-reviews .bft-reviews__nav {
+		gap: 1rem;
+		margin-top: 1.25rem;
+	}
+
+	.bft-reviews .bft-reviews__btn {
+		width: 2.4rem !important;
+		height: 2.4rem !important;
+	}
+}
